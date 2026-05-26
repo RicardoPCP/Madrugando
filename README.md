@@ -19,7 +19,9 @@ Este é o código fonte de nosso projeto de TCC. Temos o objetivo de desenvolver
 
 ````md id="g4x1nr"
 📁assets
+└──📁audio
 └──📁css
+└──📁sprites
 
 📁scripts
 
@@ -30,7 +32,7 @@ Este é o código fonte de nosso projeto de TCC. Temos o objetivo de desenvolver
 ── README.md
 ````
 
--A pasta "assets" estão com os elementos gráficos do projeto;
+-A pasta "assets" estão com os elementos gráficos e áudio do projeto;
 
 -Pasta "pages" contém as páginas HTML secundárias do projeto.
 
