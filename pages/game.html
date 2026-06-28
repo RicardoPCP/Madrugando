@@ -1,31 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magic Touch JS</title>
+
+    <title>Madrugando</title>
 
     <link rel="stylesheet" href="../Styles/style.css">
 </head>
+
 <body>
 
+    <!-- Cabeçalho -->
     <header class="game-header">
-        <h1>Magic Touch JS</h1>
 
-        <a href="../index.html" class="back-button">
-            ⬅ Voltar
-        </a>
+        <h1 class="game-title">Madrugando</h1>
+
+        <nav class="game-navigation">
+            <a href="../index.html" class="back-button">
+                ⬅ Voltar
+            </a>
+        </nav>
+
     </header>
 
+    <!-- Conteúdo principal -->
     <main class="game-container">
 
-        <canvas id="gameCanvas" width="1280" height="720">
-            Seu navegador não suporta Canvas.
-        </canvas>
+        <section class="game-area">
+
+            <canvas
+                id="gameCanvas"
+                width="1280"
+                height="720">
+                Seu navegador não suporta Canvas.
+            </canvas>
+
+        </section>
 
     </main>
 
+    <!-- Scripts -->
     <script type="module" src="../Script/main.js"></script>
 
 </body>
+
 </html>
