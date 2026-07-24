@@ -14,9 +14,8 @@ export default class Game {
         this.lastTime = 0;
         this.scene = new Scene();
         this.enemyManager = new EnemyManager();
-       this.enemySpawner = new EnemySpawner(
-    this.enemyManager,
-    "easy",
+        this.enemySpawner = new EnemySpawner(
+        this.enemyManager,"medium",
     {
         canvasWidth: this.canvas.width,
         category: "science"

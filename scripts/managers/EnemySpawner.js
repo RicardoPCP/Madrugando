@@ -15,9 +15,9 @@ const DifficultyConfig = {
 
     medium: {
 
-        spawnInterval: 2000,
-        speed: 2,
-        maxEnemies: 8,
+        spawnInterval: 2500,
+        speed: 1.1,
+        maxEnemies: 6,
         poolLevel: "medium"
 
     },
@@ -25,9 +25,9 @@ const DifficultyConfig = {
 
     hard: {
 
-        spawnInterval: 1200,
-        speed: 3,
-        maxEnemies: 12,
+        spawnInterval: 2000,
+        speed: 1.2,
+        maxEnemies: 8,
         poolLevel: "medium"
 
     }
