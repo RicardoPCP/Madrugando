@@ -1,3 +1,6 @@
+import { Enemy } from "./Enemy.js";
+import WordPools from "../data/WordPools.js";
+
 export function createBoo(x, y, config) {
 
     const { category, poolLevel, speed } = config;
