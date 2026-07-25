@@ -1,18 +1,20 @@
 export class EnemyManager {
 
-    constructor(){
+    constructor() {
 
         this.enemies = [];
+
     }
 
 
-    add(enemy){
+    add(enemy) {
 
         this.enemies.push(enemy);
+
     }
 
 
-    update(deltaTime){
+    update(deltaTime) {
 
         this.enemies.forEach(enemy => {
 
@@ -20,53 +22,61 @@ export class EnemyManager {
 
         });
 
-
         this.removeDead();
+
     }
 
 
-    draw(ctx){
+    draw(ctx) {
 
         this.enemies.forEach(enemy => {
 
             enemy.draw(ctx);
+
         });
 
     }
 
 
-    killByWord(word){
+    killByWord(word) {
 
-        const enemy = this.enemies.find(enemy =>
-            enemy.word === word
-        );
+        const killedEnemies = [];
 
+        this.enemies.forEach(enemy => {
 
-        if(enemy){
+            if (enemy.word === word) {
 
-            enemy.kill();
+                enemy.kill();
+                killedEnemies.push(enemy);
 
-            return true;
+            }
 
-        }
+        });
 
-
-        return false;
+        return killedEnemies;
 
     }
 
 
-    hasSpace(maxEnemies){
+    hasSpace(maxEnemies) {
 
         return this.enemies.length < maxEnemies;
 
     }
 
 
-    removeDead(){
+    removeDead() {
 
         this.enemies =
-        this.enemies.filter(enemy => !enemy.isDead());
+            this.enemies.filter(enemy => !enemy.isDead());
+
+    }
+
+    hasWordStartingWith(prefix){
+
+    return this.enemies.some(enemy =>
+        enemy.word.startsWith(prefix)
+    );
 
     }
 

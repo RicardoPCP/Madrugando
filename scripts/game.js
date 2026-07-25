@@ -2,6 +2,7 @@ import { Scene } from "../assets/images/scenario/scene.js";
 import { EnemyManager } from "./managers/EnemyManager.js";
 import { EnemySpawner } from "./managers/EnemySpawner.js";
 import { InputManager } from "./managers/InputManager.js";
+import { InputBar } from "./ui/InputBar.js";
 
 
 export default class Game {
@@ -24,6 +25,10 @@ export default class Game {
         this.inputManager = new InputManager(
             this.enemyManager
         );
+
+        this.inputBar = new InputBar(
+        this.inputManager,
+        this.canvas);
 
     }
 
@@ -53,14 +58,17 @@ export default class Game {
 
     update(deltaTime) {
 
-        this.enemySpawner.update(deltaTime);
-        this.enemyManager.update(deltaTime);
-        if(this.scene.update) {
+    this.enemySpawner.update(deltaTime);
+    this.enemyManager.update(deltaTime);
+    this.inputManager.update(deltaTime);
+    this.inputBar.update(deltaTime);
 
-            this.scene.update(deltaTime);
+    if(this.scene.update){
 
-        }
+        this.scene.update(deltaTime);
+
     }
+}
 
 
 
@@ -84,6 +92,7 @@ export default class Game {
         );
 
         this.enemyManager.draw(ctx);
+        this.inputBar.draw(ctx);
 
     }
 }

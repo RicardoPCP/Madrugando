@@ -12,7 +12,6 @@ const DifficultyConfig = {
 
     },
 
-
     medium: {
 
         spawnInterval: 2500,
@@ -21,7 +20,6 @@ const DifficultyConfig = {
         poolLevel: "medium"
 
     },
-
 
     hard: {
 
@@ -42,11 +40,7 @@ export class EnemySpawner {
     constructor(enemyManager, difficulty = "easy", config = {}) {
 
         this.enemyManager = enemyManager;
-
-
         this.canvasWidth = config.canvasWidth ?? 1280;
-
-
         this.enemyConfig = {
 
             category: config.category ?? "science",
@@ -55,15 +49,10 @@ export class EnemySpawner {
 
         };
 
-
         this.setDifficulty(difficulty);
-
-
         this.timer = 0;
 
     }
-
-
 
     setDifficulty(level) {
 
@@ -71,23 +60,18 @@ export class EnemySpawner {
 
     }
 
-
-
     update(deltaTime) {
 
         this.timer += deltaTime;
 
-
         if (
 
             this.timer >= this.config.spawnInterval &&
-
             this.enemyManager.hasSpace(this.config.maxEnemies)
 
         ) {
 
             this.spawn();
-
             this.timer = 0;
 
         }
@@ -98,28 +82,20 @@ export class EnemySpawner {
 
     spawn() {
 
-
         const enemy = createBoo(
 
             this.randomX(),
-
             0,
 
             {
-
                 speed: this.config.speed,
-
                 category: this.enemyConfig.category,
-
                 poolLevel: this.config.poolLevel
-
             }
 
         );
 
-
         this.enemyManager.add(enemy);
-
     }
 
 
@@ -136,7 +112,5 @@ export class EnemySpawner {
             (this.canvasWidth - margin * 2)
 
         ) + margin;
-
     }
-
 }
