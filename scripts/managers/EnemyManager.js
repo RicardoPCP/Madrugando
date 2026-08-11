@@ -1,8 +1,10 @@
 export class EnemyManager {
 
-    constructor() {
+    constructor(scoreManager, canvasHeight) {
 
         this.enemies = [];
+        this.scoreManager = scoreManager;
+        this.canvasHeight = canvasHeight;
 
     }
 
@@ -19,6 +21,13 @@ export class EnemyManager {
         this.enemies.forEach(enemy => {
 
             enemy.update(deltaTime);
+
+            if (enemy.y >= this.canvasHeight - 20) {
+
+                enemy.kill();
+                this.scoreManager.loseLife();
+
+            }
 
         });
 
@@ -72,11 +81,11 @@ export class EnemyManager {
 
     }
 
-    hasWordStartingWith(prefix){
+    hasWordStartingWith(prefix) {
 
-    return this.enemies.some(enemy =>
-        enemy.word.startsWith(prefix)
-    );
+        return this.enemies.some(enemy =>
+            enemy.word.startsWith(prefix)
+        );
 
     }
 

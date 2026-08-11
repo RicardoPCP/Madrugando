@@ -25,6 +25,7 @@ body {
 }
 
 .game-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,4 +35,38 @@ body {
 canvas {
     border: 3px solid white;
     background: black;
+}
+
+#hud {
+    position: absolute;
+
+    top: 40px;
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 1200px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.hud-box {
+    background: rgba(0, 0, 0, .45);
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    border: 2px solid rgba(255, 255, 255, .15);
+
+    backdrop-filter: blur(3px);
 }

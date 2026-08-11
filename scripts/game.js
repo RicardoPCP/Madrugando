@@ -3,6 +3,9 @@ import { EnemyManager } from "./managers/EnemyManager.js";
 import { EnemySpawner } from "./managers/EnemySpawner.js";
 import { InputManager } from "./managers/InputManager.js";
 import { InputBar } from "./ui/InputBar.js";
+import ScoreManager from "./managers/ScoreManager.js";
+
+
 
 
 export default class Game {
@@ -14,21 +17,26 @@ export default class Game {
         this.ctx = this.canvas.getContext("2d");
         this.lastTime = 0;
         this.scene = new Scene();
-        this.enemyManager = new EnemyManager();
+        this.scoreManager = new ScoreManager();
+        this.enemyManager = new EnemyManager(
+            this.scoreManager,
+            this.canvas.height
+        );
         this.enemySpawner = new EnemySpawner(
-        this.enemyManager,"medium",
-    {
-        canvasWidth: this.canvas.width,
-        category: "science"
-    }
-);
+            this.enemyManager, "medium",
+            {
+                canvasWidth: this.canvas.width,
+                category: "science"
+            }
+        );
         this.inputManager = new InputManager(
-            this.enemyManager
+            this.enemyManager,
+            this.scoreManager
         );
 
         this.inputBar = new InputBar(
-        this.inputManager,
-        this.canvas);
+            this.inputManager,
+            this.canvas);
 
     }
 
@@ -58,17 +66,21 @@ export default class Game {
 
     update(deltaTime) {
 
-    this.enemySpawner.update(deltaTime);
-    this.enemyManager.update(deltaTime);
-    this.inputManager.update(deltaTime);
-    this.inputBar.update(deltaTime);
+        if (this.scoreManager.gameOverState) {
+            return;
+        }
 
-    if(this.scene.update){
+        this.enemySpawner.update(deltaTime);
+        this.enemyManager.update(deltaTime);
+        this.inputManager.update(deltaTime);
+        this.inputBar.update(deltaTime);
 
-        this.scene.update(deltaTime);
+        if (this.scene.update) {
 
+            this.scene.update(deltaTime);
+
+        }
     }
-}
 
 
 

@@ -26,15 +26,23 @@
     <!-- Área do jogo -->
     <main class="game-container">
 
-        <canvas
-            id="gameCanvas"
-            class="game-canvas"
-            width="1280"
-            height="720">
+        <canvas id="gameCanvas" class="game-canvas" width="1280" height="720">
             Seu navegador não suporta Canvas.
         </canvas>
 
     </main>
+    <div id="hud">
+
+        <div class="hud-box">
+            <span>❤️</span>
+            <span id="lives">❤️❤️❤️</span>
+        </div>
+
+        <div class="hud-box">
+            🏆 <span id="score">0</span>
+        </div>
+
+    </div>
 
     <!-- Scripts -->
     <script type="module" src="../scripts/main.js"></script>

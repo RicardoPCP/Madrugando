@@ -1,8 +1,9 @@
 export class InputManager {
 
-    constructor(enemyManager) {
+    constructor(enemyManager, scoreManager) {
 
         this.enemyManager = enemyManager;
+        this.scoreManager = scoreManager;
         this.currentInput = "";
         this.state = "normal";
         this.stateTimer = 0;
@@ -14,15 +15,15 @@ export class InputManager {
 
     }
 
-    update(deltaTime){
+    update(deltaTime) {
 
-        if(this.state === "normal"){
+        if (this.state === "normal") {
             return;
         }
 
         this.stateTimer -= deltaTime;
 
-        if(this.stateTimer <= 0){
+        if (this.stateTimer <= 0) {
 
             this.currentInput = "";
             this.state = "normal";
@@ -33,13 +34,13 @@ export class InputManager {
 
     handleInput(event) {
 
-        if(this.state !== "normal"){
+        if (this.state !== "normal") {
             return;
         }
 
         const key = event.key.toLowerCase();
 
-        if(key === "backspace"){
+        if (key === "backspace") {
 
             this.currentInput =
                 this.currentInput.slice(0, -1);
@@ -47,11 +48,11 @@ export class InputManager {
             return;
         }
 
-        if(key.length !== 1){
+        if (key.length !== 1) {
             return;
         }
 
-        if(/[a-zà-ÿ]/i.test(key)){
+        if (/[a-zà-ÿ]/i.test(key)) {
 
             this.currentInput += key;
 
@@ -61,14 +62,14 @@ export class InputManager {
 
     }
 
-    checkWord(){
+    checkWord() {
 
         const possible =
-        this.enemyManager.hasWordStartingWith(
-        this.currentInput
-    );
+            this.enemyManager.hasWordStartingWith(
+                this.currentInput
+            );
 
-        if(!possible){
+        if (!possible) {
 
             this.state = "error";
             this.stateTimer = 90;
@@ -78,34 +79,38 @@ export class InputManager {
         }
 
         const killedEnemies =
-    this.enemyManager.killByWord(this.currentInput);
+            this.enemyManager.killByWord(this.currentInput);
 
-    if(killedEnemies.length > 0){
+        if (killedEnemies.length > 0) {
 
-    if(killedEnemies.length > 1){
+            this.scoreManager.addScore(killedEnemies.length * 10);
 
-        this.state = "combo";
-        this.stateTimer = 200;
+            this.currentInput = "";
+
+            // if (killedEnemies.length > 1) {
+
+            //     this.state = "combo";
+            //     this.stateTimer = 200;
+
+            // }
+            // else {
+
+            this.state = "success";
+            this.stateTimer = 90;
+
+            // }
+
+        }
 
     }
-    else{
 
-        this.state = "success";
-        this.stateTimer = 90;
-
-    }
-
-}
-
-    }
-
-    getInput(){
+    getInput() {
 
         return this.currentInput;
 
     }
 
-    getState(){
+    getState() {
 
         return this.state;
 
