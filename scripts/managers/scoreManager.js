@@ -53,7 +53,9 @@ export default class ScoreManager {
     getScore() {
         return this.score;
     }
-
+    getWordsCorrect() {
+        return this.wordsCorrect;
+    }
     getLives() {
         return this.lives;
     }

@@ -1,9 +1,10 @@
 export class InputManager {
 
-    constructor(enemyManager, scoreManager) {
+    constructor(enemyManager, scoreManager, waveManager) {
 
         this.enemyManager = enemyManager;
         this.scoreManager = scoreManager;
+        this.waveManager = waveManager;
         this.currentInput = "";
         this.state = "normal";
         this.stateTimer = 0;
@@ -84,6 +85,8 @@ export class InputManager {
         if (killedEnemies.length > 0) {
 
             this.scoreManager.addScore(killedEnemies.length * 10);
+
+            this.waveManager.wordCorrect();
 
             this.currentInput = "";
 

@@ -30,20 +30,35 @@
             Seu navegador não suporta Canvas.
         </canvas>
 
+        <div id="hud">
+
+            <div class="hud-box">
+                <span id="lives">❤️❤️❤️</span>
+            </div>
+
+            <div id="wave-progress">
+
+                <div id="wave-number">
+                    WAVE 1
+                </div>
+
+                <div id="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+
+                <div id="progress-text">
+                    0 / 15
+                </div>
+
+            </div>
+
+            <div class="hud-box">
+                🏆 <span id="score">0</span>
+            </div>
+
+        </div>
+
     </main>
-    <div id="hud">
-
-        <div class="hud-box">
-            <span>❤️</span>
-            <span id="lives">❤️❤️❤️</span>
-        </div>
-
-        <div class="hud-box">
-            🏆 <span id="score">0</span>
-        </div>
-
-    </div>
-
     <!-- Scripts -->
     <script type="module" src="../scripts/main.js"></script>
 

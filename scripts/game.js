@@ -4,6 +4,8 @@ import { EnemySpawner } from "./managers/EnemySpawner.js";
 import { InputManager } from "./managers/InputManager.js";
 import { InputBar } from "./ui/InputBar.js";
 import ScoreManager from "./managers/ScoreManager.js";
+import WaveManager from "./managers/WaveManager.js";
+import HUD from "./ui/HUD.js";
 
 
 
@@ -18,6 +20,8 @@ export default class Game {
         this.lastTime = 0;
         this.scene = new Scene();
         this.scoreManager = new ScoreManager();
+        this.waveManager = new WaveManager();
+        this.hud = new HUD();
         this.enemyManager = new EnemyManager(
             this.scoreManager,
             this.canvas.height
@@ -31,13 +35,15 @@ export default class Game {
         );
         this.inputManager = new InputManager(
             this.enemyManager,
-            this.scoreManager
+            this.scoreManager,
+            this.waveManager
         );
 
         this.inputBar = new InputBar(
             this.inputManager,
             this.canvas);
 
+        this.updateHUD();
     }
 
 
@@ -74,7 +80,7 @@ export default class Game {
         this.enemyManager.update(deltaTime);
         this.inputManager.update(deltaTime);
         this.inputBar.update(deltaTime);
-
+        this.updateHUD();
         if (this.scene.update) {
 
             this.scene.update(deltaTime);
@@ -107,4 +113,17 @@ export default class Game {
         this.inputBar.draw(ctx);
 
     }
+    updateHUD() {
+
+        this.hud.setWave(
+            this.waveManager.getWave()
+        );
+
+        this.hud.setProgress(
+            this.waveManager.getWordsCorrect(),
+            this.waveManager.getWordsRequired()
+        );
+
+    }
+
 }
