@@ -3,35 +3,46 @@ export class InputBar {
     constructor(inputManager, canvas) {
 
         this.inputManager = inputManager;
+
         this.canvas = canvas;
-        this.height = 70;
+
+        this.height = 75;
+
         this.cursorVisible = true;
+
         this.cursorTimer = 0;
 
     }
 
-    update(deltaTime){
+
+    update(deltaTime) {
 
         this.cursorTimer += deltaTime;
 
-        if(this.cursorTimer >= 500){
 
-            this.cursorVisible = !this.cursorVisible;
+        if (this.cursorTimer >= 500) {
+
+            this.cursorVisible =
+                !this.cursorVisible;
+
             this.cursorTimer = 0;
 
         }
+
     }
 
-    getRainbowColor(){
+
+    getRainbowColor() {
 
         const colors = [
-            "#FF0000",
-            "#FF7F00",
-            "#FFFF00",
-            "#00FF00",
-            "#00BFFF",
-            "#8A2BE2"
+            "#FF4D6D",
+            "#FF9F43",
+            "#FFE66D",
+            "#4DFF88",
+            "#4DDFFF",
+            "#8A7CFF"
         ];
+
 
         return colors[
             Math.floor(Date.now() / 50) % colors.length
@@ -39,71 +50,242 @@ export class InputBar {
 
     }
 
+
     draw(ctx) {
 
-        ctx.fillStyle = "#FFFFFF";
+        const y =
+            this.canvas.height - this.height;
+
+
+        // ========================================
+        // FUNDO DA INPUT BAR
+        // ========================================
+
+        const gradient =
+            ctx.createLinearGradient(
+                0,
+                y,
+                0,
+                this.canvas.height
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "#171d3d"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "#0b1027"
+        );
+
+
+        ctx.fillStyle = gradient;
+
+
         ctx.fillRect(
             0,
-            this.canvas.height - this.height,
+            y,
             this.canvas.width,
             this.height
         );
 
-        ctx.strokeStyle = "#D0D0D0";
+
+        // ========================================
+        // BRILHO SUPERIOR
+        // ========================================
+
+        const state =
+            this.inputManager.getState();
+
+
+        let glowColor =
+            "rgba(130, 125, 255, 0.35)";
+
+
+        if (state === "success") {
+
+            glowColor =
+                "rgba(50, 255, 120, 0.65)";
+
+        }
+
+
+        if (state === "error") {
+
+            glowColor =
+                "rgba(255, 60, 70, 0.65)";
+
+        }
+
+
+        if (state === "combo") {
+
+            glowColor =
+                "rgba(150, 120, 255, 0.75)";
+
+        }
+
+
+        ctx.shadowColor =
+            glowColor;
+
+        ctx.shadowBlur = 12;
+
+
+        ctx.strokeStyle =
+            glowColor;
+
         ctx.lineWidth = 2;
+
+
         ctx.beginPath();
+
         ctx.moveTo(
             0,
-            this.canvas.height - this.height
+            y
         );
+
         ctx.lineTo(
             this.canvas.width,
-            this.canvas.height - this.height
+            y
         );
+
         ctx.stroke();
 
-        switch(this.inputManager.getState()){
+
+        ctx.shadowBlur = 0;
+
+
+        // ========================================
+        // TEXTO
+        // ========================================
+
+        const text =
+            this.inputManager.getInput();
+
+
+        ctx.font =
+            "28px Arial";
+
+
+        ctx.textBaseline =
+            "middle";
+
+
+        let textColor =
+            "#e9e7ff";
+
+
+        switch (state) {
 
             case "success":
-                ctx.fillStyle = "#32CD32";
+
+                textColor =
+                    "#4DFF88";
+
                 break;
+
 
             case "combo":
-                ctx.fillStyle = this.getRainbowColor();
+
+                textColor =
+                    this.getRainbowColor();
+
                 break;
+
 
             case "error":
-                ctx.fillStyle = "#E53935";
+
+                textColor =
+                    "#FF5364";
+
                 break;
 
+
             default:
-                ctx.fillStyle = "#000000";
+
+                textColor =
+                    "#e9e7ff";
+
                 break;
 
         }
 
-        ctx.font = "28px Arial";
 
-        const text = this.inputManager.getInput();
+        // ========================================
+        // GLOW DO TEXTO
+        // ========================================
+
+        ctx.shadowColor =
+            textColor;
+
+        ctx.shadowBlur =
+            state === "normal"
+                ? 4
+                : 12;
+
+
+        ctx.fillStyle =
+            textColor;
+
 
         ctx.fillText(
             text,
-            25,
-            this.canvas.height - 25
+            28,
+            y + this.height / 2
         );
 
-        if(this.cursorVisible){
 
-            ctx.fillStyle = "#000000";
+        ctx.shadowBlur = 0;
+
+
+        // ========================================
+        // CURSOR
+        // ========================================
+
+        if (this.cursorVisible) {
 
             const x =
-                25 + ctx.measureText(text).width;
+                28 +
+                ctx.measureText(text).width;
 
-            ctx.fillText(
-                "|",
-                x + 2,
-                this.canvas.height - 25
+
+            ctx.fillStyle =
+                textColor;
+
+
+            ctx.shadowColor =
+                textColor;
+
+            ctx.shadowBlur = 8;
+
+
+            ctx.fillRect(
+                x + 5,
+                y + 21,
+                2,
+                32
             );
+
+
+            ctx.shadowBlur = 0;
+
         }
+
+
+        // ========================================
+        // RESTAURA BASELINE
+        // ========================================
+
+        ctx.textBaseline =
+            "alphabetic";
+
     }
+
 }
+
+
+export default InputBar;

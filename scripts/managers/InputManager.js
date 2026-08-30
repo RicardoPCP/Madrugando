@@ -5,6 +5,7 @@ export class InputManager {
         this.enemyManager = enemyManager;
         this.scoreManager = scoreManager;
         this.waveManager = waveManager;
+
         this.currentInput = "";
         this.state = "normal";
         this.stateTimer = 0;
@@ -15,6 +16,7 @@ export class InputManager {
         );
 
     }
+
 
     update(deltaTime) {
 
@@ -33,6 +35,7 @@ export class InputManager {
 
     }
 
+
     handleInput(event) {
 
         if (this.state !== "normal") {
@@ -40,6 +43,7 @@ export class InputManager {
         }
 
         const key = event.key.toLowerCase();
+
 
         if (key === "backspace") {
 
@@ -49,9 +53,11 @@ export class InputManager {
             return;
         }
 
+
         if (key.length !== 1) {
             return;
         }
+
 
         if (/[a-zà-ÿ]/i.test(key)) {
 
@@ -63,6 +69,7 @@ export class InputManager {
 
     }
 
+
     checkWord() {
 
         const possible =
@@ -70,48 +77,65 @@ export class InputManager {
                 this.currentInput
             );
 
+
+        // ERRO
         if (!possible) {
 
             this.state = "error";
+
             this.stateTimer = 90;
 
             return;
-
         }
 
+
         const killedEnemies =
-            this.enemyManager.killByWord(this.currentInput);
+            this.enemyManager.killByWord(
+                this.currentInput
+            );
+
 
         if (killedEnemies.length > 0) {
 
-            this.scoreManager.addScore(killedEnemies.length * 10);
+            // Pontuação
+            this.scoreManager.addScore(
+                killedEnemies.length * 10
+            );
 
+
+            // Wave
             this.waveManager.wordCorrect();
 
-            this.currentInput = "";
 
-            // if (killedEnemies.length > 1) {
+            // COMBO
+            if (killedEnemies.length > 1) {
 
-            //     this.state = "combo";
-            //     this.stateTimer = 200;
+                this.state = "combo";
 
-            // }
-            // else {
+                this.stateTimer = 300;
 
-            this.state = "success";
-            this.stateTimer = 90;
+            }
 
-            // }
+            // ACERTO NORMAL
+            else {
+
+                this.state = "success";
+
+                this.stateTimer = 90;
+
+            }
 
         }
 
     }
+
 
     getInput() {
 
         return this.currentInput;
 
     }
+
 
     getState() {
 
