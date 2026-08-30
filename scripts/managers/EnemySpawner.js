@@ -140,4 +140,10 @@ export class EnemySpawner {
 
     }
 
+    reset() {
+
+    this.timer = 0;
+
+    }
+
 }

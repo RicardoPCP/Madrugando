@@ -143,4 +143,12 @@ export class InputManager {
 
     }
 
+    reset() {
+
+    this.currentInput = "";
+    this.state = "normal";
+    this.stateTimer = 0;
+
+    }
+
 }

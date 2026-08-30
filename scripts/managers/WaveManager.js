@@ -81,4 +81,12 @@ export default class WaveManager {
 
     }
 
+    reset() {
+
+    this.currentWave = 1;
+    this.wordsCorrect = 0;
+    this.state = "playing";
+
+    }
+
 }

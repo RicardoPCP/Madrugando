@@ -48,7 +48,6 @@ export default class ScoreManager {
     gameOver() {
 
         this.gameOverState = true;
-        alert("Game Over");
     }
     getScore() {
         return this.score;
@@ -63,4 +62,18 @@ export default class ScoreManager {
     isGameOver() {
         return this.gameOverState;
     }
+
+    reset() {
+
+    this.score = 0;
+    this.lives = 3;
+
+    this.wordsCorrect = 0;
+    this.wordsMissed = 0;
+
+    this.gameOverState = false;
+
+    this.updateHUD();
+
+}
 }

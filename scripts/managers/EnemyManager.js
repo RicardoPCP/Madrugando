@@ -89,4 +89,10 @@ export class EnemyManager {
 
     }
 
+    reset() {
+
+    this.enemies = [];
+
+    }
+
 }

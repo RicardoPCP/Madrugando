@@ -3,7 +3,7 @@ import { EnemyManager } from "./managers/EnemyManager.js";
 import { EnemySpawner } from "./managers/EnemySpawner.js";
 import { InputManager } from "./managers/InputManager.js";
 import { InputBar } from "./ui/InputBar.js";
-import ScoreManager from "./managers/ScoreManager.js";
+import ScoreManager from "./managers/scoreManager.js";
 import WaveManager from "./managers/WaveManager.js";
 import HUD from "./ui/HUD.js";
 
@@ -64,6 +64,19 @@ export default class Game {
         this.playButton.addEventListener("click", () => {
 
             this.startGame();
+
+        });
+
+        window.addEventListener("keydown", (event) => {
+
+        if (
+            event.key === "Enter" &&
+            this.scoreManager.gameOverState
+        ) {
+
+            this.returnToMenu();
+
+        }
 
         });
 
@@ -174,6 +187,12 @@ export default class Game {
 
         this.inputBar.draw(ctx);
 
+        if (this.scoreManager.gameOverState) {
+
+            this.drawGameOver(ctx);
+
+}
+
     }
 
     updateHUD() {
@@ -187,6 +206,117 @@ export default class Game {
             this.waveManager.getWordsCorrect(),
             this.waveManager.getWordsRequired()
         );
+
+    }
+
+    drawGameOver(ctx) {
+
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    ctx.fillStyle = "rgba(5, 8, 20, 0.65)";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const boxWidth = 500;
+    const boxHeight = 220;
+
+    const boxX = (width - boxWidth) / 2;
+    const boxY = (height - boxHeight) / 2;
+
+
+    ctx.fillStyle = "rgba(15, 20, 45, 0.95)";
+
+    ctx.strokeStyle = "rgba(160, 170, 230, 0.35)";
+
+    ctx.lineWidth = 2;
+
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        boxX,
+        boxY,
+        boxWidth,
+        boxHeight,
+        20
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.font = "bold 56px Arial";
+
+    ctx.fillStyle = "#f5f3ff";
+
+    ctx.shadowColor =
+        "rgba(150, 140, 255, 0.5)";
+
+    ctx.shadowBlur = 15;
+
+    ctx.fillText(
+        "GAME OVER",
+        width / 2,
+        boxY + 65
+    );
+
+
+    ctx.shadowBlur = 0;
+
+    ctx.font = "20px Arial";
+
+    ctx.fillStyle = "#f4f0c9";
+
+    ctx.fillText(
+        `Pontuação: ${this.scoreManager.getScore()}`,
+        width / 2,
+        boxY + 120
+    );
+
+    ctx.font = "16px Arial";
+
+    ctx.fillStyle =
+        "rgba(235, 233, 255, 0.7)";
+
+    ctx.fillText(
+        "Pressione ENTER para voltar ao menu",
+        width / 2,
+        boxY + 170
+    );
+
+
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+
+    }
+
+    returnToMenu() {
+
+        this.gameStarted = false;
+
+        this.scoreManager.reset();
+
+        this.enemyManager.reset();
+
+        this.enemySpawner.reset();
+
+        this.inputManager.reset();
+
+        this.waveManager.reset();
+
+        this.menu.style.display = "flex";
+
+        this.hud.hide();
 
     }
 
