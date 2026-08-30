@@ -40,38 +40,52 @@ export class EnemySpawner {
     constructor(enemyManager, difficulty = "easy", config = {}) {
 
         this.enemyManager = enemyManager;
-        this.canvasWidth = config.canvasWidth ?? 1280;
+
+        this.canvasWidth =
+            config.canvasWidth ?? 1280;
+
         this.enemyConfig = {
 
-            category: config.category ?? "science",
+            category:
+                config.category ?? "science",
 
             ...config.enemyConfig
 
         };
 
         this.setDifficulty(difficulty);
+
         this.timer = 0;
 
     }
 
+
     setDifficulty(level) {
 
-        this.config = DifficultyConfig[level];
+        this.config =
+            DifficultyConfig[level];
 
     }
+
 
     update(deltaTime) {
 
         this.timer += deltaTime;
 
+
         if (
 
-            this.timer >= this.config.spawnInterval &&
-            this.enemyManager.hasSpace(this.config.maxEnemies)
+            this.timer >=
+                this.config.spawnInterval &&
+
+            this.enemyManager.hasSpace(
+                this.config.maxEnemies
+            )
 
         ) {
 
             this.spawn();
+
             this.timer = 0;
 
         }
@@ -79,38 +93,51 @@ export class EnemySpawner {
     }
 
 
-
     spawn() {
 
         const enemy = createBoo(
 
             this.randomX(),
+
             0,
 
             {
-                speed: this.config.speed,
-                category: this.enemyConfig.category,
-                poolLevel: this.config.poolLevel
+
+                speed:
+                    this.config.speed,
+
+                category:
+                    this.enemyConfig.category,
+
+                poolLevel:
+                    this.config.poolLevel
+
             }
 
         );
 
-        this.enemyManager.add(enemy);
-    }
 
+        this.enemyManager.add(enemy);
+
+    }
 
 
     randomX() {
 
-        const margin = 50;
+        const margin = 60;
 
 
         return (
 
             Math.random() *
 
-            (this.canvasWidth - margin * 2)
+            (
+                this.canvasWidth -
+                margin * 2
+            )
 
         ) + margin;
+
     }
+
 }
