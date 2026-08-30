@@ -124,7 +124,7 @@ export class EnemySpawner {
 
     randomX() {
 
-        const margin = 60;
+        const margin = 50;
 
 
         return (
