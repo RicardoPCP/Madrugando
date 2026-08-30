@@ -1,0 +1,19 @@
+.game-container {
+    position: relative;
+
+    width: 1280px;
+    height: 720px;
+
+    margin: 20px auto 0;
+}
+
+canvas {
+    display: block;
+
+    width: 1280px;
+    height: 720px;
+
+    border: 3px solid white;
+
+    background: black;
+}

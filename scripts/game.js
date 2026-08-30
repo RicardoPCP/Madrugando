@@ -8,44 +8,76 @@ import WaveManager from "./managers/WaveManager.js";
 import HUD from "./ui/HUD.js";
 
 
-
-
 export default class Game {
-
 
     constructor() {
 
         this.canvas = document.getElementById("gameCanvas");
         this.ctx = this.canvas.getContext("2d");
+
         this.lastTime = 0;
+
+        this.gameStarted = false;
+
         this.scene = new Scene();
+
         this.scoreManager = new ScoreManager();
+
         this.waveManager = new WaveManager();
+
         this.hud = new HUD();
+
+
         this.enemyManager = new EnemyManager(
             this.scoreManager,
             this.canvas.height
         );
+
+
         this.enemySpawner = new EnemySpawner(
-            this.enemyManager, "medium",
+            this.enemyManager,
+            "medium",
             {
                 canvasWidth: this.canvas.width,
                 category: "science"
             }
         );
+
+
         this.inputManager = new InputManager(
             this.enemyManager,
             this.scoreManager,
             this.waveManager
         );
 
+
         this.inputBar = new InputBar(
             this.inputManager,
-            this.canvas);
+            this.canvas
+        );
 
-        this.updateHUD();
+        this.menu = document.getElementById("game-menu");
+
+        this.playButton = document.getElementById("play-button");
+
+
+        this.playButton.addEventListener("click", () => {
+
+            this.startGame();
+
+        });
+
+        this.hud.hide();
     }
 
+
+    startGame() {
+
+        this.gameStarted = true;
+        this.menu.style.display = "none";
+        this.hud.show();
+        this.lastTime = performance.now();
+    }
 
     start() {
 
@@ -57,43 +89,66 @@ export default class Game {
 
     loop(timestamp) {
 
+        const deltaTime =
+            timestamp - this.lastTime;
 
-        const deltaTime = timestamp - this.lastTime;
         this.lastTime = timestamp;
+
+
         this.update(deltaTime);
+
         this.draw();
+
 
         requestAnimationFrame(
             this.loop.bind(this)
         );
+
     }
-
-
 
     update(deltaTime) {
 
-        if (this.scoreManager.gameOverState) {
+        if (!this.gameStarted) {
+
+            if (this.scene.update) {
+
+                this.scene.update(deltaTime);
+
+            }
+
             return;
         }
 
+        if (this.scoreManager.gameOverState) {
+
+            return;
+
+        }
+
         this.enemySpawner.update(deltaTime);
+
         this.enemyManager.update(deltaTime);
+
         this.inputManager.update(deltaTime);
+
         this.inputBar.update(deltaTime);
+
         this.updateHUD();
+
         if (this.scene.update) {
 
             this.scene.update(deltaTime);
 
         }
+
     }
-
-
 
     draw() {
 
         const ctx = this.ctx;
+
         const width = this.canvas.width;
+
         const height = this.canvas.height;
 
         ctx.clearRect(
@@ -109,15 +164,24 @@ export default class Game {
             height
         );
 
+        if (!this.gameStarted) {
+
+            return;
+
+        }
+
         this.enemyManager.draw(ctx);
+
         this.inputBar.draw(ctx);
 
     }
+
     updateHUD() {
 
         this.hud.setWave(
             this.waveManager.getWave()
         );
+
 
         this.hud.setProgress(
             this.waveManager.getWordsCorrect(),

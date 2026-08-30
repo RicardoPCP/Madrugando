@@ -2,39 +2,98 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Madrugando</title>
 
-    <link rel="stylesheet" href="../Styles/style.css">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/header.css">
+    <link rel="stylesheet" href="../Styles/game.css">
+    <link rel="stylesheet" href="../Styles/hud.css">
+    <link rel="stylesheet" href="../Styles/menu.css">
+
 </head>
+
 
 <body>
 
-    <!-- Cabeçalho -->
     <header class="game-header">
-        <h1 class="game-title">Madrugando</h1>
+
+        <h1 class="game-title">
+            Madrugando
+        </h1>
+
 
         <nav class="game-navigation">
-            <a href="../index.html" class="back-button">
+
+            <a
+                href="../index.html"
+                class="back-button">
+
                 ⬅ Voltar
+
             </a>
+
         </nav>
+
     </header>
 
-    <!-- Área do jogo -->
+
     <main class="game-container">
 
-        <canvas id="gameCanvas" class="game-canvas" width="1280" height="720">
+
+        <canvas
+            id="gameCanvas"
+            class="game-canvas"
+            width="1280"
+            height="720">
+
             Seu navegador não suporta Canvas.
+
         </canvas>
+
+
+        <div id="game-menu">
+
+            <div class="menu-content">
+
+                <h2>Madrugando</h2>
+
+
+                <button id="play-button">
+                    Jogar
+                </button>
+
+
+                <button id="customize-button">
+                    Customizar Jogo
+                </button>
+
+
+                <button id="how-to-play-button">
+                    Como Jogar
+                </button>
+
+            </div>
+
+        </div>
+
 
         <div id="hud">
 
             <div class="hud-box">
-                <span id="lives">❤️❤️❤️</span>
+
+                <span id="lives">
+                    ❤️❤️❤️
+                </span>
+
             </div>
+
 
             <div id="wave-progress">
 
@@ -42,9 +101,13 @@
                     WAVE 1
                 </div>
 
+
                 <div id="progress-bar">
+
                     <div id="progress-fill"></div>
+
                 </div>
+
 
                 <div id="progress-text">
                     0 / 15
@@ -52,15 +115,26 @@
 
             </div>
 
+
             <div class="hud-box">
-                🏆 <span id="score">0</span>
+
+                🏆
+                <span id="score">
+                    0
+                </span>
+
             </div>
 
         </div>
 
     </main>
-    <!-- Scripts -->
-    <script type="module" src="../scripts/main.js"></script>
+
+
+    <script
+        type="module"
+        src="../scripts/main.js">
+    </script>
+
 
 </body>
 
