@@ -1,0 +1,129 @@
+// BANNER CARROSSEL
+
+document.addEventListener('DOMContentLoaded', () => {
+  const carrosselBanner = document.querySelector('.banner-carrossel ul');
+
+  const itensBanner = carrosselBanner.querySelectorAll('li');
+
+  if (itensBanner.length <= 1) return;
+
+  let indexAtual = [...itensBanner].findIndex(item => item.classList.contains('ativo'));
+  if (indexAtual === -1) indexAtual = 0;
+
+  const TEMPO_CARROSSEL = 3000;
+
+  function proximoCarrossel() {
+    itensBanner[indexAtual].classList.remove('ativo');
+    indexAtual = (indexAtual + 1) % itensBanner.length;
+    itensBanner[indexAtual].classList.add('ativo');
+  }
+
+  setInterval(proximoCarrossel, TEMPO_CARROSSEL);
+});
+
+// CARROSSEL FANTASMAS
+document.addEventListener('DOMContentLoaded', () => {
+  const carrosselFant = document.querySelector('.carrossel-fantasmas ul');
+  const itensFant = carrosselFant.querySelectorAll('li');
+  const setaAntes = document.querySelector('.carrossel-fantasmas .seta.antes');
+  const setaDepois = document.querySelector('.carrossel-fantasmas .seta.depois');
+  const containerBolinhas = document.querySelector('.carrossel-fantasmas .bolinhas');
+  const nomeFantasma = document.querySelector('.nomeFant');
+  const textoFantasma = document.querySelector('.textoFant');
+
+  if (itensFant.length <= 1) return;
+
+  let indexAtualFant = [...itensFant].findIndex(item => item.classList.contains('ativo'));
+  if (indexAtualFant === -1) indexAtualFant = 0;
+
+  const TEMPO_CARROSSEL = 10000;
+
+  itensFant.forEach((_, i) => {
+    const bolinha = document.createElement('button');
+    bolinha.classList.add('bolinha');
+    if (i === indexAtualFant) bolinha.classList.add('ativa');
+    bolinha.addEventListener('click', () => irParaSlide(i));
+    containerBolinhas.appendChild(bolinha);
+  });
+
+  const bolinhas = containerBolinhas.querySelectorAll('.bolinha');
+
+  function atualizarBolinhas() {
+    bolinhas.forEach(b => b.classList.remove('ativa'));
+    bolinhas[indexAtualFant].classList.add('ativa');
+  }
+
+  function atualizarTexto() {
+    const item = itensFant[indexAtualFant];
+    if (item.dataset.nome) nomeFantasma.textContent = item.dataset.nome;
+    if (item.dataset.texto) {
+      const topicos = item.dataset.texto.split('|');
+      textoFantasma.innerHTML = topicos
+        .map(t => `<li>${t.replace(/^\*/, '').trim()}</li>`)
+        .join('');
+    }
+  }
+
+  function proximoCarrosselFant() {
+    itensFant[indexAtualFant].classList.remove('ativo');
+    indexAtualFant = (indexAtualFant + 1) % itensFant.length;
+    itensFant[indexAtualFant].classList.add('ativo');
+    atualizarBolinhas();
+    atualizarTexto();
+  }
+
+  function anteriorCarrosselFant() {
+    itensFant[indexAtualFant].classList.remove('ativo');
+    indexAtualFant = (indexAtualFant - 1 + itensFant.length) % itensFant.length;
+    itensFant[indexAtualFant].classList.add('ativo');
+    atualizarBolinhas();
+    atualizarTexto();
+  }
+
+  function irParaSlide(i) {
+    itensFant[indexAtualFant].classList.remove('ativo');
+    indexAtualFant = i;
+    itensFant[indexAtualFant].classList.add('ativo');
+    atualizarBolinhas();
+    atualizarTexto();
+    reiniciarIntervalo();
+  }
+
+  function reiniciarIntervalo() {
+    clearInterval(intervalo);
+    intervalo = setInterval(proximoCarrosselFant, TEMPO_CARROSSEL);
+  }
+
+  atualizarTexto();
+
+  let intervalo = setInterval(proximoCarrosselFant, TEMPO_CARROSSEL);
+
+  setaDepois.addEventListener('click', () => {
+    proximoCarrosselFant();
+    reiniciarIntervalo();
+  });
+
+  setaAntes.addEventListener('click', () => {
+    anteriorCarrosselFant();
+    reiniciarIntervalo();
+  });
+});
+
+// BANNER BAIXO FADE
+document.addEventListener('DOMContentLoaded', () => {
+  const elementos = document.querySelectorAll('.banner-baixo');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('ativo');
+      } else {
+        entry.target.classList.remove('ativo');
+      }
+    });
+  }, {
+    threshold: 0.2
+  });
+
+  elementos.forEach(el => observer.observe(el));
+});

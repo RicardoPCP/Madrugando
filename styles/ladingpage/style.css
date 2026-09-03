@@ -1,0 +1,170 @@
+@import url('./main.css');
+
+
+
+*{
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    /*border: solid 1px red;*/
+}
+
+:root{
+  /* banner */
+  --bg:#071426;
+  --bg2:#0F2345;
+  --cards:#173A73;
+
+  /* textos */
+  --text-comum:#EAF5FF;
+  --text-secundario:#AFCDF4;
+  --text-destaque: #4EA8FF;
+
+  /* btns */
+  --btns:#72C8FF;
+  --btns-grad: #96c2fc;
+  --btn-lamp: #fde673ce;
+  --btn-luz: #fde67348;
+
+  /* EXTRA */
+  --janela: #2B1407;
+}
+
+body{
+    background-color: var(--bg);
+    color: var(--text-comum);
+    line-height:1.6;
+    width: 100%;
+    min-height: 100dvh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: grid;
+    font-family: 'Inter', sans-serif;
+
+
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+    "nav nav nav"
+    "main main main"
+    "footer footer footer";
+}
+
+nav{
+    grid-area: nav;
+}
+main{
+    grid-area: main;
+}
+footer{
+    grid-area: footer;
+    display: flex;
+    overflow-x: hidden;
+    flex-wrap: nowrap;
+    text-align: center;
+    justify-content: center;
+    padding: 0 1rem 0.25rem 1rem;
+
+    svg{
+        color: currentColor;
+        vertical-align: middle;
+        display: inline-block;
+    }
+}
+
+h1{
+    font-family: 'Rubik', serif;
+    font-size: clamp(40px, 5.5vw, 72px);
+    text-align: center;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: 0.2rem;
+    color: var(--texto-comum);
+    text-shadow: 0 6px 0 rgba(0,0,0,0.25);
+}
+
+h2{    
+    font-family: 'Rubik', serif;
+    font-size: clamp(1.8rem, 3vw, 3.75rem);
+    text-shadow: 0 6px 0 rgba(0,0,0,0.25);
+    color: var(--btn-lamp);
+}
+
+h3{
+    font-family: 'Rubik', serif;
+    font-size: clamp(1rem, 1.8vw, 1.5rem);
+    text-align: center;
+    text-shadow: 5px 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+p, ul, li{
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+}
+a{
+    text-decoration: none;
+}
+
+footer{
+    font-size: clamp(0.25rem, 1vw, 0.5rem);
+    font-weight: 200;
+    color: var(--texto-comum);
+    font-style: italic;
+}
+
+nav ul, nav li, nav li a{
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(1.25rem, 2vw, 0.75rem);
+    text-decoration: none;
+    letter-spacing: 2px;
+    color: var(--texto-comum);
+    font-weight: 600;
+}
+
+/* BOTÕES */
+button {
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+
+.btn-jogar{
+    color: var(--bg);
+    font-weight: 700; 
+    font-size: 20px;
+    background: linear-gradient(180deg, var(--btns) 0%, var(--btns-grad) 100%);
+    padding: 1rem 2rem; 
+    border-radius: 5px;
+    outline: 2px solid rgb(0, 0, 0);
+    box-shadow: 0 10px 0 var(--bg2);
+
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.btn-jogar:hover:not(nav .btn-jogar){ 
+    transform:translateY(-3px); 
+    box-shadow: 0 13px 0 var(--btn-lamp), 0 22px 34px var(--btn-luz); 
+    color: var(--btn-lamp);
+    text-shadow: 0 0 10px var(--btn-luz);
+}
+
+.btn-jogar:active{ 
+    transform:translateY(3px); 
+    box-shadow: 0 6px 0 var(--btn-lamp), 0 10px 20px var(--btn-luz); 
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-destaque);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secundario);
+}
