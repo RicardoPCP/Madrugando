@@ -119,6 +119,8 @@ if (result.result === "correct") {
 
     this.waveManager.nextWave();
 
+    this.enemyManager.reset();
+
     this.bossManager.removeBoss();
 
 }
