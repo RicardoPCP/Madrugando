@@ -252,3 +252,9 @@
     transform:
         translateY(0);
 }
+
+.game-logo {
+    width: 350px;
+    height: auto;
+    margin-bottom: 20px;
+}
