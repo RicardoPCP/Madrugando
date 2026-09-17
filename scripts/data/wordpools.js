@@ -2,21 +2,6 @@ const WordPools = {
 
     boo: {
 
-        math: {
-            easy: [
-                "soma", "número", "conta", "valor", "raiz",
-                "mais", "menos", "vezes", "dividir", "igual",
-                "zero", "um", "dois", "cinco", "dez",
-                "total", "base", "ponto", "linha", "forma"
-            ],
-
-            medium: [
-                "ângulo", "média", "fração", "decimal", "equação",
-                "resultado", "problema", "cálculo", "algebra", "função",
-                "porcentagem", "expressão", "geometria", "incógnita", "volume"
-            ]
-        },
-
         science: {
             easy: [
                 "energia", "matéria", "água", "ar", "fogo",
@@ -31,19 +16,36 @@ const WordPools = {
             ]
         },
 
-        biology: {
+
+        english: {
             easy: [
-                "DNA", "gene", "célula", "tecido", "órgão",
-                "sangue", "pele", "raiz", "folha", "animal",
-                "planta", "osso", "corpo", "vida", "ser"
+                "hello", "world", "house", "water", "food",
+                "school", "book", "friend", "family", "time",
+                "day", "night", "sun", "moon", "life"
             ],
 
             medium: [
-                "microrganismo", "mitocôndria", "membrana", "citoplasma",
-                "bactéria", "vírus", "fungo", "sistema", "digestão",
-                "respiração", "circulação", "nervoso", "reprodução", "genética"
+                "beautiful", "important", "different", "knowledge", "language",
+                "question", "answer", "experience", "environment", "development",
+                "education", "technology", "community", "understand", "possible"
             ]
         },
+
+
+        portuguese: {
+            easy: [
+                "casa", "água", "livro", "escola", "amigo",
+                "família", "tempo", "dia", "noite", "vida",
+                "sol", "lua", "terra", "cidade", "pessoa"
+            ],
+
+            medium: [
+                "substantivo", "adjetivo", "verbo", "pronome", "advérbio",
+                "oração", "período", "sujeito", "predicado", "concordância",
+                "pontuação", "acentuação", "sintaxe", "semântica", "gramática"
+            ]
+        },
+
 
         geography: {
             easy: [
@@ -59,6 +61,7 @@ const WordPools = {
             ]
         },
 
+
         history: {
             easy: [
                 "rei", "reino", "guerra", "paz", "tempo",
@@ -73,7 +76,9 @@ const WordPools = {
                 "industrialização", "expansão", "conquista"
             ]
         }
+
     }
+
 };
 
 export default WordPools;
