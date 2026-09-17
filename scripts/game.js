@@ -6,6 +6,7 @@ import { InputBar } from "./ui/InputBar.js";
 import ScoreManager from "./managers/scoreManager.js";
 import WaveManager from "./managers/WaveManager.js";
 import HUD from "./ui/HUD.js";
+import { BossManager } from "./managers/BossManager.js";
 
 
 export default class Game {
@@ -24,6 +25,8 @@ export default class Game {
         this.scoreManager = new ScoreManager();
 
         this.waveManager = new WaveManager();
+
+        this.bossManager = new BossManager();
 
         this.hud = new HUD();
 
@@ -67,18 +70,75 @@ export default class Game {
 
         });
 
+        this.canvas.addEventListener("click", (event) => {
+
+    if (!this.gameStarted)
+        return;
+
+    if (this.waveManager.getState() !== "question")
+        return;
+
+    if (!this.bossManager.hasBoss())
+        return;
+
+
+    const rect =
+        this.canvas.getBoundingClientRect();
+
+
+    const scaleX =
+        this.canvas.width / rect.width;
+
+    const scaleY =
+        this.canvas.height / rect.height;
+
+
+    const mouseX =
+        (event.clientX - rect.left) * scaleX;
+
+    const mouseY =
+        (event.clientY - rect.top) * scaleY;
+
+
+    const result =
+    this.bossManager.handleClick(
+        mouseX,
+        mouseY
+    );
+
+    if (!result)
+        return;
+
+    if (result.result === "wrong") {
+
+    this.scoreManager.loseLife();
+
+}
+
+if (result.result === "correct") {
+
+    this.waveManager.nextWave();
+
+    this.bossManager.removeBoss();
+
+}
+
+});
+
+
         window.addEventListener("keydown", (event) => {
 
-        if (
-            event.key === "Enter" &&
-            this.scoreManager.gameOverState
-        ) {
+            if (
+                event.key === "Enter" &&
+                this.scoreManager.gameOverState
+            ) {
 
-            this.returnToMenu();
+                this.returnToMenu();
 
-        }
+            }
 
         });
+
 
         this.hud.hide();
     }
@@ -87,10 +147,15 @@ export default class Game {
     startGame() {
 
         this.gameStarted = true;
+
         this.menu.style.display = "none";
+
         this.hud.show();
+
         this.lastTime = performance.now();
+
     }
+
 
     start() {
 
@@ -99,6 +164,7 @@ export default class Game {
         );
 
     }
+
 
     loop(timestamp) {
 
@@ -119,6 +185,7 @@ export default class Game {
 
     }
 
+
     update(deltaTime) {
 
         if (!this.gameStarted) {
@@ -130,7 +197,9 @@ export default class Game {
             }
 
             return;
+
         }
+
 
         if (this.scoreManager.gameOverState) {
 
@@ -138,15 +207,35 @@ export default class Game {
 
         }
 
-        this.enemySpawner.update(deltaTime);
 
-        this.enemyManager.update(deltaTime);
+        if (this.waveManager.getState() === "playing") {
 
-        this.inputManager.update(deltaTime);
+            this.enemySpawner.update(deltaTime);
 
-        this.inputBar.update(deltaTime);
+            this.enemyManager.update(deltaTime);
+
+            this.inputManager.update(deltaTime);
+
+            this.inputBar.update(deltaTime);
+
+        }
+
+
+        this.bossManager.update(deltaTime);
+
+
+        if (
+            this.waveManager.getState() === "question" &&
+            !this.bossManager.hasBoss()
+        ) {
+
+            this.bossManager.spawn("science");
+
+        }
+
 
         this.updateHUD();
+
 
         if (this.scene.update) {
 
@@ -156,6 +245,7 @@ export default class Game {
 
     }
 
+
     draw() {
 
         const ctx = this.ctx;
@@ -164,6 +254,7 @@ export default class Game {
 
         const height = this.canvas.height;
 
+
         ctx.clearRect(
             0,
             0,
@@ -171,11 +262,13 @@ export default class Game {
             height
         );
 
+
         this.scene.render(
             ctx,
             width,
             height
         );
+
 
         if (!this.gameStarted) {
 
@@ -183,17 +276,22 @@ export default class Game {
 
         }
 
+
         this.enemyManager.draw(ctx);
 
+        this.bossManager.draw(ctx);
+
         this.inputBar.draw(ctx);
+
 
         if (this.scoreManager.gameOverState) {
 
             this.drawGameOver(ctx);
 
-}
+        }
 
     }
+
 
     updateHUD() {
 
@@ -209,100 +307,125 @@ export default class Game {
 
     }
 
+
     drawGameOver(ctx) {
 
-    const width = this.canvas.width;
-    const height = this.canvas.height;
+        const width = this.canvas.width;
 
-    ctx.fillStyle = "rgba(5, 8, 20, 0.65)";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
+        const height = this.canvas.height;
 
 
-    const boxWidth = 500;
-    const boxHeight = 220;
-
-    const boxX = (width - boxWidth) / 2;
-    const boxY = (height - boxHeight) / 2;
+        ctx.fillStyle = "rgba(5, 8, 20, 0.65)";
 
 
-    ctx.fillStyle = "rgba(15, 20, 45, 0.95)";
-
-    ctx.strokeStyle = "rgba(160, 170, 230, 0.35)";
-
-    ctx.lineWidth = 2;
-
-
-    ctx.beginPath();
-
-    ctx.roundRect(
-        boxX,
-        boxY,
-        boxWidth,
-        boxHeight,
-        20
-    );
-
-    ctx.fill();
-    ctx.stroke();
+        ctx.fillRect(
+            0,
+            0,
+            width,
+            height
+        );
 
 
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+        const boxWidth = 500;
 
-    ctx.font = "bold 56px Arial";
-
-    ctx.fillStyle = "#f5f3ff";
-
-    ctx.shadowColor =
-        "rgba(150, 140, 255, 0.5)";
-
-    ctx.shadowBlur = 15;
-
-    ctx.fillText(
-        "GAME OVER",
-        width / 2,
-        boxY + 65
-    );
+        const boxHeight = 220;
 
 
-    ctx.shadowBlur = 0;
+        const boxX =
+            (width - boxWidth) / 2;
 
-    ctx.font = "20px Arial";
-
-    ctx.fillStyle = "#f4f0c9";
-
-    ctx.fillText(
-        `Pontuação: ${this.scoreManager.getScore()}`,
-        width / 2,
-        boxY + 120
-    );
-
-    ctx.font = "16px Arial";
-
-    ctx.fillStyle =
-        "rgba(235, 233, 255, 0.7)";
-
-    ctx.fillText(
-        "Pressione ENTER para voltar ao menu",
-        width / 2,
-        boxY + 170
-    );
+        const boxY =
+            (height - boxHeight) / 2;
 
 
-    ctx.textAlign = "left";
-    ctx.textBaseline = "alphabetic";
+        ctx.fillStyle =
+            "rgba(15, 20, 45, 0.95)";
+
+        ctx.strokeStyle =
+            "rgba(160, 170, 230, 0.35)";
+
+        ctx.lineWidth = 2;
+
+
+        ctx.beginPath();
+
+
+        ctx.roundRect(
+            boxX,
+            boxY,
+            boxWidth,
+            boxHeight,
+            20
+        );
+
+
+        ctx.fill();
+
+        ctx.stroke();
+
+
+        ctx.textAlign = "center";
+
+        ctx.textBaseline = "middle";
+
+
+        ctx.font = "bold 56px Arial";
+
+        ctx.fillStyle = "#f5f3ff";
+
+
+        ctx.shadowColor =
+            "rgba(150, 140, 255, 0.5)";
+
+        ctx.shadowBlur = 15;
+
+
+        ctx.fillText(
+            "GAME OVER",
+            width / 2,
+            boxY + 65
+        );
+
+
+        ctx.shadowBlur = 0;
+
+
+        ctx.font = "20px Arial";
+
+        ctx.fillStyle = "#f4f0c9";
+
+
+        ctx.fillText(
+            `Pontuação: ${this.scoreManager.getScore()}`,
+            width / 2,
+            boxY + 120
+        );
+
+
+        ctx.font = "16px Arial";
+
+        ctx.fillStyle =
+            "rgba(235, 233, 255, 0.7)";
+
+
+        ctx.fillText(
+            "Pressione ENTER para voltar ao menu",
+            width / 2,
+            boxY + 170
+        );
+
+
+        ctx.textAlign = "left";
+
+        ctx.textBaseline = "alphabetic";
 
     }
+
 
     returnToMenu() {
 
         this.gameStarted = false;
+
 
         this.scoreManager.reset();
 
@@ -313,6 +436,9 @@ export default class Game {
         this.inputManager.reset();
 
         this.waveManager.reset();
+
+        this.bossManager.removeBoss();
+
 
         this.menu.style.display = "flex";
 
