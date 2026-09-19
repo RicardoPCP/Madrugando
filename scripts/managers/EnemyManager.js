@@ -47,23 +47,41 @@ export class EnemyManager {
     }
 
 
-    killByWord(word) {
+    processWord(word) {
 
-        const killedEnemies = [];
+        const result = {
+            correct: false,
+            killed: false,
+            enemy: null
+        };
 
         this.enemies.forEach(enemy => {
 
-            if (enemy.word === word) {
+            if (enemy.word !== word) {
+                return;
+            }
+
+            result.correct = true;
+            result.enemy = enemy;
+
+            if (enemy.type === "scromblus") {
+
+                const completed =
+                    enemy.advanceWord();
+
+                result.killed = completed;
+
+            } else {
 
                 enemy.kill();
-                killedEnemies.push(enemy);
+
+                result.killed = true;
 
             }
 
         });
 
-        return killedEnemies;
-
+        return result;
     }
 
 
@@ -91,7 +109,14 @@ export class EnemyManager {
 
     reset() {
 
-    this.enemies = [];
+        this.enemies = [];
+
+    }
+    hasScromblus() {
+
+        return this.enemies.some(
+            enemy => enemy.type === "scromblus"
+        );
 
     }
 

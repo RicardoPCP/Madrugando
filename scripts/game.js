@@ -5,6 +5,7 @@ import { InputManager } from "./managers/InputManager.js";
 import { InputBar } from "./ui/InputBar.js";
 import ScoreManager from "./managers/scoreManager.js";
 import WaveManager from "./managers/WaveManager.js";
+import { PowerUpManager } from "./managers/PowerUpManager.js";
 import HUD from "./ui/HUD.js";
 import { BossManager } from "./managers/BossManager.js";
 
@@ -46,6 +47,10 @@ export default class Game {
             }
         );
 
+        this.powerUpManager = new PowerUpManager(
+            this.canvas.width,
+            this.canvas.height
+        );
 
         this.inputManager = new InputManager(
             this.enemyManager,
@@ -72,60 +77,60 @@ export default class Game {
 
         this.canvas.addEventListener("click", (event) => {
 
-    if (!this.gameStarted)
-        return;
+            if (!this.gameStarted)
+                return;
 
-    if (this.waveManager.getState() !== "question")
-        return;
+            if (this.waveManager.getState() !== "question")
+                return;
 
-    if (!this.bossManager.hasBoss())
-        return;
-
-
-    const rect =
-        this.canvas.getBoundingClientRect();
+            if (!this.bossManager.hasBoss())
+                return;
 
 
-    const scaleX =
-        this.canvas.width / rect.width;
-
-    const scaleY =
-        this.canvas.height / rect.height;
+            const rect =
+                this.canvas.getBoundingClientRect();
 
 
-    const mouseX =
-        (event.clientX - rect.left) * scaleX;
+            const scaleX =
+                this.canvas.width / rect.width;
 
-    const mouseY =
-        (event.clientY - rect.top) * scaleY;
+            const scaleY =
+                this.canvas.height / rect.height;
 
 
-    const result =
-    this.bossManager.handleClick(
-        mouseX,
-        mouseY
-    );
+            const mouseX =
+                (event.clientX - rect.left) * scaleX;
 
-    if (!result)
-        return;
+            const mouseY =
+                (event.clientY - rect.top) * scaleY;
 
-    if (result.result === "wrong") {
 
-    this.scoreManager.loseLife();
+            const result =
+                this.bossManager.handleClick(
+                    mouseX,
+                    mouseY
+                );
 
-}
+            if (!result)
+                return;
 
-if (result.result === "correct") {
+            if (result.result === "wrong") {
 
-    this.waveManager.nextWave();
+                this.scoreManager.loseLife();
 
-    this.enemyManager.reset();
+            }
 
-    this.bossManager.removeBoss();
+            if (result.result === "correct") {
 
-}
+                this.waveManager.nextWave();
 
-});
+                this.enemyManager.reset();
+
+                this.bossManager.removeBoss();
+
+            }
+
+        });
 
 
         window.addEventListener("keydown", (event) => {
@@ -189,62 +194,41 @@ if (result.result === "correct") {
 
 
     update(deltaTime) {
-
         if (!this.gameStarted) {
-
             if (this.scene.update) {
-
                 this.scene.update(deltaTime);
-
             }
-
             return;
-
         }
-
 
         if (this.scoreManager.gameOverState) {
-
             return;
-
         }
 
-
+        // Gameplay normal: inimigos, digitação e power-ups
         if (this.waveManager.getState() === "playing") {
-
             this.enemySpawner.update(deltaTime);
-
             this.enemyManager.update(deltaTime);
-
+            this.powerUpManager.update(deltaTime);
             this.inputManager.update(deltaTime);
-
             this.inputBar.update(deltaTime);
-
         }
 
-
+        // O Boss precisa continuar sendo atualizado durante a questão
         this.bossManager.update(deltaTime);
-
 
         if (
             this.waveManager.getState() === "question" &&
             !this.bossManager.hasBoss()
         ) {
-
             this.bossManager.spawn("science");
-
         }
-
 
         this.updateHUD();
 
-
         if (this.scene.update) {
-
             this.scene.update(deltaTime);
-
         }
-
     }
 
 
@@ -282,6 +266,7 @@ if (result.result === "correct") {
         this.enemyManager.draw(ctx);
 
         this.bossManager.draw(ctx);
+        this.powerUpManager.draw(ctx);
 
         this.inputBar.draw(ctx);
 
@@ -434,6 +419,8 @@ if (result.result === "correct") {
         this.enemyManager.reset();
 
         this.enemySpawner.reset();
+
+        this.powerUpManager.reset();
 
         this.inputManager.reset();
 

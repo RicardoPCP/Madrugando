@@ -1,5 +1,5 @@
 import { createBoo } from "../entities/boo.js";
-
+import { createScromblus } from "../entities/scromblus.js";
 
 const DifficultyConfig = {
 
@@ -56,6 +56,8 @@ export class EnemySpawner {
         this.setDifficulty(difficulty);
 
         this.timer = 0;
+        this.scromblusTimer = 0;
+        this.scromblusInterval = 10000;
 
     }
 
@@ -66,17 +68,45 @@ export class EnemySpawner {
             DifficultyConfig[level];
 
     }
+    spawnScromblus() {
 
+        if (this.enemyManager.hasScromblus()) {
+            return;
+        }
+
+        const enemy = createScromblus(
+            this.randomX(),
+            0,
+            {
+                speed: this.config.speed,
+                category: this.enemyConfig.category
+            }
+        );
+
+        this.enemyManager.add(enemy);
+
+    }
 
     update(deltaTime) {
 
         this.timer += deltaTime;
+        this.scromblusTimer += deltaTime;
 
+        if (
+            this.scromblusTimer >= this.scromblusInterval &&
+            !this.enemyManager.hasScromblus()
+        ) {
+
+            this.spawnScromblus();
+
+            this.scromblusTimer = 0;
+
+        }
 
         if (
 
             this.timer >=
-                this.config.spawnInterval &&
+            this.config.spawnInterval &&
 
             this.enemyManager.hasSpace(
                 this.config.maxEnemies
@@ -142,8 +172,8 @@ export class EnemySpawner {
 
     reset() {
 
-    this.timer = 0;
-
+        this.timer = 0;
+        this.scromblusTimer = 0;
     }
 
 }

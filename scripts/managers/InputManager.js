@@ -77,7 +77,6 @@ export class InputManager {
                 this.currentInput
             );
 
-
         // ERRO
         if (!possible) {
 
@@ -89,46 +88,31 @@ export class InputManager {
         }
 
 
-        const killedEnemies =
-            this.enemyManager.killByWord(
+        const result =
+            this.enemyManager.processWord(
                 this.currentInput
             );
 
 
-        if (killedEnemies.length > 0) {
+        if (result.correct) {
 
             // Pontuação
-            this.scoreManager.addScore(
-                killedEnemies.length * 10
-            );
+            this.scoreManager.addScore(10);
 
 
             // Wave
             this.waveManager.wordCorrect();
 
 
-            // COMBO
-            if (killedEnemies.length > 1) {
-
-                this.state = "combo";
-
-                this.stateTimer = 300;
-
-            }
-
             // ACERTO NORMAL
-            else {
+            this.currentInput = "";
 
-                this.state = "success";
+            this.state = "success";
 
-                this.stateTimer = 90;
-
-            }
+            this.stateTimer = 90;
 
         }
-
     }
-
 
     getInput() {
 
@@ -145,10 +129,11 @@ export class InputManager {
 
     reset() {
 
-    this.currentInput = "";
-    this.state = "normal";
-    this.stateTimer = 0;
+        this.currentInput = "";
+        this.state = "normal";
+        this.stateTimer = 0;
 
     }
 
 }
+
