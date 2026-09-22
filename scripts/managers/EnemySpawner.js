@@ -126,7 +126,8 @@ export class EnemySpawner {
             0,
             {
                 speed: this.config.speed,
-                category: this.enemyConfig.category
+                category: this.enemyConfig.category,
+                poolLevel: this.config.poolLevel
             }
         );
 
