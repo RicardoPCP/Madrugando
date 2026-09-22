@@ -44,7 +44,8 @@ export default class Game {
             {
                 canvasWidth: this.canvas.width,
                 category: "science"
-            }
+            },
+            this.waveManager
         );
 
         this.powerUpManager = new PowerUpManager(

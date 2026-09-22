@@ -20,27 +20,23 @@ export class Enemy {
 
 
     draw(ctx) {
+        ctx.fillStyle = this.type === "scromblus"
+            ? "limegreen"
+            : "white";
 
         ctx.font = "20px Arial";
-
-        ctx.fillStyle = "white";
-
-        ctx.fillText(
-            this.word,
-            this.x,
-            this.y
-        );
+        ctx.fillText(this.word, this.x, this.y);
     }
 
 
-    kill(){
+    kill() {
 
         this.alive = false;
 
     }
 
 
-    isDead(){
+    isDead() {
 
         return !this.alive;
 
