@@ -40,6 +40,15 @@ export default class ScoreManager {
         }
     }
 
+    setLives(lives) {
+        this.lives = Math.min(Math.max(lives, 0), 3);
+        this.updateHUD();
+
+        if (this.lives <= 0) {
+            this.gameOver();
+        }
+    }
+
     updateHUD() {
         this.hud.setScore(this.score);
         this.hud.setLives(this.lives);

@@ -9,6 +9,7 @@
     height: 100%;
 
     display: flex;
+
     justify-content: center;
     align-items: center;
 
@@ -21,6 +22,7 @@
 
     z-index: 2000;
 }
+
 
 .menu-content {
 
@@ -127,8 +129,6 @@
             transparent 2px
         ),
 
-        /* céu */
-
         linear-gradient(
             145deg,
             #101936,
@@ -143,14 +143,16 @@
         0 0 60px rgba(80, 70, 170, 0.2);
 }
 
-
 .menu-content h2 {
+
     position: relative;
 
     margin: 5px 0 85px;
 
     font-size: 76px;
+
     font-weight: 700;
+
     letter-spacing: 2px;
 
     color: #f5f3ff;
@@ -166,7 +168,7 @@
 
 .menu-content h2::before {
 
-    content: "Madrugando";
+    content: attr(data-text);
 
     position: absolute;
 
@@ -227,6 +229,7 @@
         border-color 0.2s ease;
 }
 
+
 .menu-content button:hover {
 
     background:
@@ -247,6 +250,7 @@
         0 0 20px rgba(120, 120, 230, 0.2);
 }
 
+
 .menu-content button:active {
 
     transform:
@@ -254,7 +258,82 @@
 }
 
 .game-logo {
+
     width: 350px;
+
     height: auto;
+
     margin-bottom: 20px;
+}
+
+#game-config {
+
+    display: none;
+
+    padding-top: 100px;
+}
+
+#game-config h2 {
+
+    margin: 5px 0 25px;
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    color: #f5f3ff;
+
+    text-shadow:
+        0 3px 0 #17152c,
+        0 6px 18px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(150, 140, 255, 0.35);
+}
+
+#game-config label {
+
+    margin-top: 10px;
+
+    margin-bottom: 5px;
+
+    font-size: 16px;
+
+    color: #eeeef8;
+}
+
+
+#game-config select {
+
+    width: 300px;
+
+    padding: 12px;
+
+    margin-bottom: 15px;
+
+    font-size: 16px;
+
+    color: #eeeef8;
+
+    background: #1c203c;
+
+    border: 1px solid rgba(170, 175, 220, 0.30);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+
+#game-config select option {
+
+    color: #eeeef8;
+
+    background: #1c203c;
+}
+
+
+#start-game-button {
+
+    margin-top: 10px;
 }
