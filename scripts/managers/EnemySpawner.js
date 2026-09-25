@@ -2,24 +2,31 @@
 import { createBoo } from "../entities/boo.js";
 import { createScromblus } from "../entities/scromblus.js";
 
-const DifficultyConfig = {
+export const DifficultyConfig = {
+
     easy: {
         spawnInterval: 3000,
-        speed: 1.1,
-        maxEnemies: 5,
-        poolLevel: "easy"
+        speed: 1,
+        maxEnemies: 3,
+        poolLevel: "easy",
+        lives: 3
+
     },
     medium: {
         spawnInterval: 2500,
         speed: 1.1,
-        maxEnemies: 6,
-        poolLevel: "medium"
+        maxEnemies: 5,
+        poolLevel: "medium",
+        lives: 3
+
     },
     hard: {
         spawnInterval: 2000,
         speed: 1.2,
-        maxEnemies: 8,
-        poolLevel: "medium"
+        maxEnemies: 7,
+        poolLevel: "medium",
+        lives: 2
+
     }
 };
 
@@ -138,7 +145,8 @@ export class EnemySpawner {
             0,
             {
                 speed: this.config.speed,
-                category: this.enemyConfig.category
+                category: this.enemyConfig.category,
+                poolLevel: this.config.poolLevel
             }
         );
 
@@ -203,4 +211,9 @@ export class EnemySpawner {
         this.currentWave = 1;
         this.scromblusSpawned = 0;
     }
+
+    setCategory(category) {
+        this.enemyConfig.category = category;
+    }
+
 }

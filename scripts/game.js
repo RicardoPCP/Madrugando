@@ -1,6 +1,6 @@
 import { Scene } from "../assets/images/scenario/scene.js";
 import { EnemyManager } from "./managers/EnemyManager.js";
-import { EnemySpawner } from "./managers/EnemySpawner.js";
+import { EnemySpawner, DifficultyConfig } from "./managers/EnemySpawner.js";
 import { InputManager } from "./managers/InputManager.js";
 import { InputBar } from "./ui/InputBar.js";
 import ScoreManager from "./managers/scoreManager.js";
@@ -77,7 +77,9 @@ export default class Game {
 
         this.playButton.addEventListener("click", () => {
 
-            this.startGame();
+        this.mainMenu.style.display = "none";
+
+        this.gameConfig.style.display = "flex";
 
         });
 
@@ -156,10 +158,70 @@ export default class Game {
 
 
         this.hud.hide();
+
+        this.mainMenu =
+            document.getElementById("main-menu");
+
+        this.gameConfig =
+            document.getElementById("game-config");
+            
+            this.backButton =
+            this.gameConfig.querySelector("back-button");
+
+            this.backButton.addEventListener("back", () => {
+
+            this.gameConfig.style.display = "none";
+
+            this.mainMenu.style.display = "flex";
+
+        });
+
+        this.subjectSelect =
+            document.getElementById("subject-select");
+
+        this.difficultySelect =
+            document.getElementById("difficulty-select");
+
+        this.startGameButton =
+            document.getElementById("start-game-button");
+
+
+        this.startGameButton.addEventListener("click", () => {
+
+            const subject =
+                this.subjectSelect.value;
+
+            const difficulty =
+                this.difficultySelect.value;
+
+            if (!subject || !difficulty)
+                return;
+
+            this.selectedSubject = subject;
+            this.selectedDifficulty = difficulty;
+
+            this.startGame();
+
+        });
     }
 
 
     startGame() {
+
+        const difficulty =
+            DifficultyConfig[this.selectedDifficulty];
+
+        this.enemySpawner.setDifficulty(
+            this.selectedDifficulty
+        );
+
+        this.enemySpawner.setCategory(
+            this.selectedSubject
+        );
+
+        this.scoreManager.setLives(
+            difficulty.lives
+        );
 
         this.gameStarted = true;
 
@@ -229,7 +291,9 @@ export default class Game {
             this.waveManager.getState() === "question" &&
             !this.bossManager.hasBoss()
         ) {
-            this.bossManager.spawn("science");
+            this.bossManager.spawn(
+            this.selectedSubject
+);
         }
 
         this.updateHUD();

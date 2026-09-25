@@ -5,11 +5,12 @@ export function createScromblus(x, y, config) {
 
     const {
         category = "science",
-        speed = 1.1
+        speed = 1.1,
+        poolLevel = "medium"
     } = config;
 
     const pool =
-        WordPools.boo[category].medium;
+        WordPools.boo[category][poolLevel];
 
     const words = [];
 
@@ -42,7 +43,6 @@ export function createScromblus(x, y, config) {
             this.currentWordIndex >=
             this.words.length
         ) {
-
             this.kill();
 
             return true;
