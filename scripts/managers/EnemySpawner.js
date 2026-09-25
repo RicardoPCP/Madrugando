@@ -5,7 +5,7 @@ import { createScromblus } from "../entities/scromblus.js";
 const DifficultyConfig = {
     easy: {
         spawnInterval: 3000,
-        speed: 1,
+        speed: 1.1,
         maxEnemies: 5,
         poolLevel: "easy"
     },
@@ -32,6 +32,7 @@ export class EnemySpawner {
     ) {
         this.enemyManager = enemyManager;
         this.waveManager = waveManager;
+        this.spawnPauseTimer = 0;
 
         this.canvasWidth =
             config.canvasWidth ?? 1280;
@@ -40,6 +41,7 @@ export class EnemySpawner {
             category: config.category ?? "science",
             ...config.enemyConfig
         };
+
 
         this.setDifficulty(difficulty);
 
@@ -53,6 +55,10 @@ export class EnemySpawner {
         this.scromblusSpawned = 0;
     }
 
+    pauseSpawning(duration = 500) {
+        this.spawnPauseTimer = duration;
+    }
+
     setDifficulty(level) {
         this.config = DifficultyConfig[level];
     }
@@ -60,6 +66,13 @@ export class EnemySpawner {
     update(deltaTime) {
         // Detecta mudança de wave
         const wave = this.waveManager.getWave();
+
+        if (this.spawnPauseTimer > 0) {
+
+            this.spawnPauseTimer -= deltaTime;
+
+            return;
+        }
 
         if (wave !== this.currentWave) {
             this.currentWave = wave;
@@ -100,8 +113,9 @@ export class EnemySpawner {
     }
 
     spawn() {
+
         const enemy = createBoo(
-            this.randomX(),
+            0,
             0,
             {
                 speed: this.config.speed,
@@ -110,12 +124,17 @@ export class EnemySpawner {
             }
         );
 
+        enemy.x = this.findSafeX(
+            enemy.word.length * 10
+        );
+
         this.enemyManager.add(enemy);
     }
 
     spawnScromblus() {
+
         const enemy = createScromblus(
-            this.randomX(),
+            0,
             0,
             {
                 speed: this.config.speed,
@@ -123,11 +142,50 @@ export class EnemySpawner {
             }
         );
 
+        enemy.x = this.findSafeX(
+            enemy.word.length * 10
+        );
+
         this.enemyManager.add(enemy);
 
         console.log(
             `Scromblus ${this.scromblusSpawned + 1} de ${this.currentWave} na Wave ${this.currentWave}`
         );
+    }
+    findSafeX(wordWidth = 100) {
+
+        const margin = 100;
+        const minDistance = 50;
+        const maxAttempts = 10;
+
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+
+            const x =
+                Math.random() *
+                (this.canvasWidth - margin * 2 - wordWidth) +
+                margin;
+
+            let safe = true;
+
+            for (const enemy of this.enemyManager.enemies) {
+
+                const distance =
+                    Math.abs(enemy.x - x);
+
+                if (distance < wordWidth + minDistance) {
+                    safe = false;
+                    break;
+                }
+            }
+
+            if (safe) {
+                return x;
+            }
+        }
+
+        // Se não encontrou espaço após várias tentativas,
+        // usa uma posição aleatória mesmo assim.
+        return this.randomX();
     }
 
     randomX() {

@@ -1,10 +1,16 @@
 export class PowerUp {
-    constructor({ x, y, type, speed }) {
+    constructor({ x, y, type, speed, word }) {
         this.x = x;
         this.y = y;
         this.type = type;
         this.speed = speed;
+        this.word = word;
+        this.correctWords = 0;
+        this.requiredWords = 3;
+        this.unlocked = false;
+
         this.alive = true;
+
     }
 
     update(deltaTime) {
@@ -17,7 +23,6 @@ export class PowerUp {
     }
 
     draw(ctx) {
-        ctx.font = "32px Arial";
 
         const icons = {
             despertador: "⏰",
@@ -25,13 +30,42 @@ export class PowerUp {
             reverso: "🔄",
             duplicador: "✕2"
         };
+        ctx.font = "32px Arial";
 
         ctx.fillText(
             icons[this.type],
             this.x,
             this.y
         );
+
+        ctx.font = "20px Arial";
+        ctx.fillText(
+            this.word,
+            this.x,
+            this.y + 30
+        );
     }
+
+    registerCorrectWord() {
+
+        if (this.unlocked) {
+            return;
+        }
+
+        this.correctWords++;
+
+        if (this.correctWords >= this.requiredWords) {
+            this.unlocked = true;
+        }
+    }
+
+
+    isUnlocked() {
+
+        return this.unlocked;
+
+    }
+
 
     kill() {
         this.alive = false;

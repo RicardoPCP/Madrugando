@@ -50,13 +50,18 @@ export default class Game {
 
         this.powerUpManager = new PowerUpManager(
             this.canvas.width,
-            this.canvas.height
+            this.canvas.height,
+            this.enemyManager,
+            this.enemySpawner,
+            this.scoreManager,
+            this.waveManager
         );
 
         this.inputManager = new InputManager(
             this.enemyManager,
             this.scoreManager,
-            this.waveManager
+            this.waveManager,
+            this.powerUpManager
         );
 
 
@@ -126,6 +131,8 @@ export default class Game {
                 this.waveManager.nextWave();
 
                 this.enemyManager.reset();
+
+                this.powerUpManager.clear();
 
                 this.bossManager.removeBoss();
 
@@ -263,14 +270,15 @@ export default class Game {
 
         }
 
-
         this.enemyManager.draw(ctx);
 
         this.bossManager.draw(ctx);
-        this.powerUpManager.draw(ctx);
+
+        if (this.waveManager.getState() === "playing") {
+            this.powerUpManager.draw(ctx);
+        }
 
         this.inputBar.draw(ctx);
-
 
         if (this.scoreManager.gameOverState) {
 

@@ -8,13 +8,25 @@ export class Enemy {
         this.speed = speed;
         this.type = type;
         this.alive = true;
+        this.frozen = false;
+        this.reversed = false;
 
     }
 
 
     update(deltaTime) {
 
-        this.y += this.speed * (deltaTime / 16);
+        if (this.frozen) {
+            return;
+        }
+
+        const direction =
+            this.reversed ? -1 : 1;
+
+        this.y +=
+            this.speed *
+            direction *
+            (deltaTime / 16);
 
     }
 
@@ -26,6 +38,28 @@ export class Enemy {
 
         ctx.font = "20px Arial";
         ctx.fillText(this.word, this.x, this.y);
+    }
+    // Referente ao power-up Gelo, que congela os inimigos na tela;
+    freeze() {
+
+        this.frozen = true;
+
+    }
+
+
+    unfreeze() {
+
+        this.frozen = false;
+
+    }
+
+    // Referente ao power-up Reverso, que inverte a direção dos inimigos na tela;
+    reverse() {
+        this.reversed = true;
+    }
+
+    unreverse() {
+        this.reversed = false;
     }
 
 

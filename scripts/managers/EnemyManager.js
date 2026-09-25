@@ -120,4 +120,46 @@ export class EnemyManager {
 
     }
 
+    killAll() {
+
+        this.enemies.forEach(enemy => {
+            enemy.kill();
+        });
+
+        this.removeDead();
+
+    }
+    freezeAll() {
+
+        this.enemies.forEach(enemy => {
+            enemy.freeze();
+        });
+
+    }
+
+    unfreezeAll() {
+
+        this.enemies.forEach(enemy => {
+            enemy.unfreeze();
+        });
+
+    }
+
+    reverseAll() {
+
+        this.enemies.forEach(enemy => {
+            enemy.reverse();
+        });
+
+    }
+
+    unreverseAll() {
+
+        this.enemies.forEach(enemy => {
+            enemy.unreverse();
+        });
+
+    }
+
+
 }

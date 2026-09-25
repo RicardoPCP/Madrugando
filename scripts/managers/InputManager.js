@@ -1,10 +1,11 @@
 export class InputManager {
 
-    constructor(enemyManager, scoreManager, waveManager) {
+    constructor(enemyManager, scoreManager, waveManager, powerUpManager) {
 
         this.enemyManager = enemyManager;
         this.scoreManager = scoreManager;
         this.waveManager = waveManager;
+        this.powerUpManager = powerUpManager;
 
         this.currentInput = "";
         this.state = "normal";
@@ -72,46 +73,62 @@ export class InputManager {
 
     checkWord() {
 
-        const possible =
+        const enemyPossible =
             this.enemyManager.hasWordStartingWith(
                 this.currentInput
             );
 
-        // ERRO
-        if (!possible) {
+        const powerUpPossible =
+            this.powerUpManager.hasWordStartingWith(
+                this.currentInput
+            );
+
+        // A palavra ainda pode ser de inimigo ou PowerUp
+        if (!enemyPossible && !powerUpPossible) {
 
             this.state = "error";
-
             this.stateTimer = 90;
 
             return;
         }
 
+        // Verifica se existe uma palavra COMPLETA de PowerUp
+        const powerUpResult =
+            this.powerUpManager.processWord(
+                this.currentInput
+            );
 
-        const result =
+        // Verifica se existe uma palavra COMPLETA de inimigo
+        const enemyResult =
             this.enemyManager.processWord(
                 this.currentInput
             );
 
+        // Ainda estamos digitando
+        if (!powerUpResult.correct && !enemyResult.correct) {
+            return;
+        }
 
-        if (result.correct) {
+        // Acertou inimigo
+        if (enemyResult.correct) {
 
-            // Pontuação
             this.scoreManager.addScore(10);
 
-
-            // Wave
             this.waveManager.wordCorrect();
-
-
-            // ACERTO NORMAL
-            this.currentInput = "";
-
-            this.state = "success";
-
-            this.stateTimer = 90;
-
         }
+
+        // Acertou PowerUp
+        if (powerUpResult.correct) {
+
+            console.log(
+                `Power-up acertado: ` +
+                `${powerUpResult.powerUp.type}`
+            );
+        }
+
+        this.currentInput = "";
+        this.state = "success";
+        this.stateTimer = 90;
     }
 
     getInput() {

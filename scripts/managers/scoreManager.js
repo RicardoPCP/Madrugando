@@ -7,6 +7,7 @@ export default class ScoreManager {
         console.log("Vidas iniciais:", this.lives);
         this.wordsCorrect = 0;
         this.wordsMissed = 0;
+        this.multiplier = 1;
 
         this.gameOverState = false;
 
@@ -15,12 +16,17 @@ export default class ScoreManager {
 
         this.updateHUD();
     }
+    // adiciona os pontos à pontuação e atualiza o HUD
 
     addScore(points = 10) {
-        this.score += points;
+        this.score += points * this.multiplier;
         this.wordsCorrect++;
 
         this.updateHUD();
+    }
+
+    setMultiplier(value) {
+        this.multiplier = value;
     }
 
     loseLife() {
@@ -65,15 +71,15 @@ export default class ScoreManager {
 
     reset() {
 
-    this.score = 0;
-    this.lives = 3;
+        this.score = 0;
+        this.lives = 3;
 
-    this.wordsCorrect = 0;
-    this.wordsMissed = 0;
+        this.wordsCorrect = 0;
+        this.wordsMissed = 0;
 
-    this.gameOverState = false;
+        this.gameOverState = false;
 
-    this.updateHUD();
+        this.updateHUD();
 
-}
+    }
 }
